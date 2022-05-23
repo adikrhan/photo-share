@@ -1,0 +1,50 @@
+.form-control {
+  display: flex;
+  flex-direction: column;
+
+}
+
+.form-control input {
+  height: 4rem;
+  border-radius: var(--border-radius-sm);
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  padding: 0 1.5rem;
+  width: 100%;
+}
+
+.form-control input:focus,
+.form-control textarea:focus {
+  outline: none;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  transition: 150ms;
+}
+
+.form-control input[type="date"] {
+  font-family: "Open Sans", "Roboto", sans-serif;
+  color: var(--secondary-text-color);
+}
+
+.form-control input[type="file"] {
+  font-family: "Open Sans", "Roboto", sans-serif;
+  color: var(--secondary-text-color);
+}
+
+.form-control textarea {
+  width: 100%;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: var(--border-radius-sm);
+  padding: 1rem;
+  resize: vertical;
+  font-family: "Open Sans", sans-serif;
+}
+
+.form-control label {
+  padding: .8rem ;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.error {
+  margin: 0;
+  color: red;
+}

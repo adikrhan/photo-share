@@ -1,0 +1,117 @@
+.container {
+  max-width: 80%;
+  margin: var(--margin-top) auto;
+}
+
+.container h2 {
+  font-size: 3rem;
+  margin-bottom: 4rem;
+}
+
+.settings-general {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 4rem;
+}
+
+.settings-general-head {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+  margin-bottom: 2rem;
+}
+
+.settings-general-head h3 {
+  font-size: 1.6rem;
+  margin: 0.8rem 0;
+}
+
+.profile-pic {
+  display: flex;
+  align-items: center;
+  margin-bottom: 3rem;
+  gap: 2rem;
+}
+
+.profile-pic-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  text-align: right;
+}
+
+.profile-pic-text span {
+  font-size: 1.4rem;
+}
+
+.change-link {
+  text-decoration: underline;
+  color: #787878;
+  cursor: pointer;
+}
+
+.profile-pic-img {
+  width: 70px;
+  clip-path: circle(50% at 50% 50%);
+}
+
+.profile-pic-img img {
+  width: 100%;
+  display: block;
+}
+
+.settings-general-form {
+  display: grid;
+  grid-template-columns: 50% 50%;
+  gap: 2rem;
+  margin-right: 2rem;
+}
+
+.settings-uses {
+  margin-bottom: 2rem;
+}
+
+.settings-uses-head {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+  margin-bottom: 2rem;
+}
+
+.settings-uses-head h3 {
+  font-size: 1.6rem;
+  margin: 0.8rem 0;
+}
+
+.settings-uses-form {
+  display: grid;
+  grid-template-columns: 50% 50%;
+  gap: 2rem;
+  margin-right: 2rem;
+}
+
+.save-btn {
+  text-align: right;
+}
+
+.change-btn {
+  background: white;
+  color: var(--primary-text-color);
+  border: none;
+  padding: 0;
+  border-radius: 0.3rem;
+  cursor: pointer;
+  text-align: right;
+  text-decoration: underline;
+}
+
+@media (min-width: 1500px) {
+  .container {
+    max-width: 120rem;
+  }
+}
+
+@media (max-width: 700px) {
+  .settings-general-form, .settings-uses-form {
+    grid-template-columns: 100%;
+  }
+  .settings-uses-head h3, .settings-general-head h3 {
+    font-size: 1.8rem;
+  }
+}

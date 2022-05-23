@@ -1,0 +1,101 @@
+.container {
+  display: grid;
+  grid-template-columns: 35% 1fr 35%;
+  align-items: center;
+  margin: 0 auto;
+  position: relative;
+  max-width: 80%;
+  height: var(--footer-height);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+}
+
+.logo-link {
+  display: contents;
+}
+
+.h1-first {
+  font-family: "Futura PT";
+  font-size: 22px;
+  font-weight: 100;
+}
+.h1-second {
+  font-family: "FuturaBook";
+  font-size: 22px;
+  font-weight: 100;
+}
+
+.icon {
+  font-size: 2rem;
+  color: var(--color-primary-green);
+  margin-left: 1rem;
+  transform: rotate(20deg);
+}
+
+.hamburger {
+  font-size: 3rem;
+  cursor: pointer;
+  color: #222222;
+  margin-top: 5px
+}
+
+.main-nav {
+  display: none;
+  position: relative;
+}
+
+.right-col {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+.user-thumbnail {
+  height: 3rem;
+  cursor: pointer;
+  clip-path: circle(50% at 50% 50%);
+}
+
+.user-thumbnail img {
+  height: 100%;
+  display: block;
+}
+
+.generic-user-img {
+  border-radius: 20px;
+  background-color: var(--color-primary-blue);
+  border: none;
+  width: 3rem;
+  height: 3rem;
+  color: white;
+  cursor: pointer;
+}
+
+@media (min-width: 1600px) {
+  .container {
+    max-width: 80%;
+  }
+}
+
+@media (min-width: 700px) {
+  .hamburger {
+    display: none;
+  }
+  .main-nav {
+    display: block;
+  }
+}
+
+@media (max-width: 700px) {
+  .container {
+    max-width: 90%;
+    grid-template-columns: min-content 1fr min-content;
+  }
+}

@@ -1,0 +1,28 @@
+.head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    grid-column: 1 / -1;
+  }
+  
+  .head h2 {
+    font-size: 3.6rem;
+    margin: 0;
+  }
+  
+  .head input {
+    height: 3rem;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: var(--border-radius-lg);
+    padding-left: 1.4rem;
+    font-size: 1.2rem;
+  }
+  
+  .head input:focus {
+    outline: none;
+    border: 1px solid rgba(0, 0, 0, 0.25);
+  }
+  
+  .head input::placeholder {
+    color: rgb(192, 192, 192);
+  }

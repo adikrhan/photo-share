@@ -1,0 +1,21 @@
+.container {
+  max-width: 80rem;
+  margin: var(--margin-top) auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.loading {
+  padding-top: 4rem;
+}
+
+.error-msg {
+  font-size: 1.4rem;
+}
+
+@media (max-width: 1000px) {
+  .container {
+    max-width: 80%;
+  }
+}

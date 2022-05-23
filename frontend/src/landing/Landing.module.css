@@ -1,0 +1,116 @@
+.container {
+}
+
+.landing {
+  padding-top: 15vh;
+  height: calc(100vh - var(--footer-height));
+  overflow: hidden;
+}
+
+.hero-text {
+  max-width: 600px;
+  margin: 0 auto 8rem;
+  text-align: center;
+}
+
+.hero-text h1 {
+  font-size: 5rem;
+  line-height: 140%;
+  margin: 0 auto 5rem;
+  font-family: "Futura PT";
+  color: var(--primary-text-color);
+  max-width: 50rem;
+}
+
+.hero-images {
+  width: 80%;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+.img-container {
+  width: 100%;
+  background-color: white;
+  padding: 1rem;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  box-shadow: 0 2px 6px 0 rgb(0 0 0 / 15%);
+  transition: 350ms;
+}
+
+.img-container:hover {
+  position: relative;
+  z-index: 10;
+  transform: translateY(-50%);
+  transition: 350ms;
+}
+
+.img-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.line {
+  margin-bottom: 4rem;
+}
+
+.buttons {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+}
+
+.signup-btn,
+.browse-btn {
+  width: 13rem;
+  border-radius: var(--border-radius-xl);
+  cursor: pointer;
+  transition: 250ms;
+  width: 13rem;
+  font-weight: 600;
+  height: 4rem;
+}
+
+.signup-btn {
+  background-color: var(--color-primary-green);
+  color: var(--color-light-green);
+  border: none;
+}
+
+.browse-btn {
+  background-color: white;
+  color: var(--primary-text-color);
+  border: 1px solid rgba(31, 41, 51, 0.4);
+}
+
+.signup-btn:hover {
+  opacity: 0.85;
+  transition: 250ms;
+}
+
+.browse-btn:hover {
+  background-color: #f0f0f0;
+  transition: 250ms;
+}
+
+@media (min-width: 1500px) {
+  .landing {
+    padding-top: 35rem;
+  }
+  .hero-text h1 {
+    font-size: 6rem;
+    max-width: 75rem;
+  }
+  .hero-text {
+    max-width: 75rem;
+  }
+}
+
+@media (max-width: 700px) {
+
+  .hero-text {
+    max-width: 80%;
+  }
+}

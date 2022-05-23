@@ -1,0 +1,23 @@
+.btn {
+  margin-top: 3rem;
+  height: 40px;
+  border-radius: var(--border-radius-xl);
+  border: none;
+  width: 165px;
+  background-color: var(--color-primary-green);
+  color: var(--color-light-green);
+  align-self: center;
+  transition: 250ms;
+  cursor: pointer;
+}
+
+.btn:hover {
+  opacity: 0.9;
+  transition: 250ms;
+}
+
+.btn:disabled {
+  background-color: var(--color-disabled-green);
+  color: white;
+  cursor: not-allowed;
+}

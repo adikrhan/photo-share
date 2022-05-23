@@ -1,0 +1,12 @@
+.modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    max-width: 800px;
+    height: 60%;
+    max-height: 600px;
+    z-index: 1000;
+    background-color: white;
+}

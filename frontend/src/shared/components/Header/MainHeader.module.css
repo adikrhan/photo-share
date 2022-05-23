@@ -1,0 +1,4 @@
+.main-header {
+  height: var(--footer-height);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+}

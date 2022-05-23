@@ -1,0 +1,293 @@
+.container {
+  background-color: white;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  display: grid;
+  grid-template-columns: minmax(70rem, 1fr) max-content;
+  grid-template-rows: minmax(0, 90vh);
+}
+
+.img-container {
+  display: flex;
+  background-color: black;
+}
+
+.img-container img {
+  display: block;
+  object-fit: contain;
+  width: 100%;
+}
+
+.meta-container {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  min-width: 30rem;
+}
+
+.user {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+  padding-bottom: 2rem;
+}
+
+.profile-img-container {
+  width: 4rem;
+  height: 4rem;
+  clip-path: circle(50% at 50% 50%);
+}
+
+.profile-img-container svg {
+  width: 4rem;
+  height: 4rem;
+}
+
+.user img {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.user span {
+  font-size: 1.4rem;
+  cursor: pointer;
+  transition: 200ms;
+}
+
+.user span:hover {
+  text-decoration: underline;
+  transition: 200ms;
+}
+
+.head h3 {
+  margin: 0;
+  font-size: 2.4rem;
+}
+
+.head span {
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.head span:hover {
+  text-decoration: underline;
+}
+
+.list ul {
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.list li {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.list li img {
+  width: 2rem;
+}
+
+.list li span {
+  font-size: 1.2rem;
+}
+
+.buttons {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.btn {
+  border-radius: var(--border-radius-xl);
+  border: none;
+  cursor: pointer;
+}
+
+.map {
+  background-color: var(--color-primary-green);
+  color: var(--color-light-green);
+  font-size: 1.2rem;
+  padding: 0 1.2rem;
+  height: 3rem;
+}
+
+.map:hover {
+  opacity: 0.95;
+}
+
+.like,
+.has-liked {
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  height: 3rem;
+  width: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 200ms;
+}
+
+.like:hover {
+  background-color: rgb(218, 102, 102);
+  transition: 200ms;
+}
+
+.like:hover > svg {
+  color: white;
+  transition: 200ms;
+}
+
+.has-liked {
+  background-color: rgb(218, 102, 102);
+  transition: 200ms;
+}
+
+.has-liked svg {
+  color: white;
+  transition: 200ms;
+}
+
+.options {
+  display: flex;
+  gap: 0.8rem;
+  font-size: 1.2rem;
+  text-decoration: underline;
+}
+
+.options span {
+  opacity: 0.7;
+  transition: 200ms;
+  cursor: pointer;
+}
+
+.options span:hover {
+  opacity: 1;
+  transition: 200ms;
+}
+
+.confirm-container {
+  max-width: 25rem;
+  padding: 1rem 1rem 2rem 1rem;
+  display: flex;
+  gap: 1rem;
+  text-align: center;
+  flex-direction: column;
+  align-items: center;
+  background-color: var(--support-color);
+  border-radius: var(--border-radius-sm);
+  transform: translateY(1rem);
+  transition: 250ms;
+}
+
+.confirm-container p {
+  font-size: 1.2rem;
+}
+
+.confirm-btns {
+  display: flex;
+  width: 100%;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.yes,
+.cancel {
+  border: none;
+  width: 35%;
+  padding: 0.5rem 1rem;
+  color: white;
+  border-radius: var(--border-radius-sm);
+  cursor: pointer;
+}
+
+.yes {
+  background-color: indianred;
+}
+
+.yes:hover {
+  opacity: 0.9;
+}
+
+.cancel {
+  opacity: 0.8;
+  background-color: white;
+  color: var(--color-text-secondary);
+}
+
+.cancel:hover {
+  opacity: 1;
+}
+
+.likes-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.back {
+  cursor: pointer;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: .4rem;
+  opacity: 0.8;
+}
+
+.back:hover {
+  opacity: 1;
+}
+
+.back svg {
+  font-size: 1rem;
+}
+
+.likes-list {
+  margin: 0;
+  padding: 0;
+}
+
+.likes-list li {
+  display: flex;
+  font-size: 1.4rem;
+  align-items: center;
+  gap: 1rem;
+  cursor: pointer;
+  padding: 0.8rem;
+  transition: 200ms;
+  border-radius: var(--border-radius-sm);
+}
+
+.likes-list li:hover {
+  background-color: var(--support-color);
+  transition: 200ms;
+}
+
+.user-thumbnail {
+  width: 3rem;
+  height: 3rem;
+  clip-path: circle(50% at 50% 50%);
+}
+
+.user-thumbnail img {
+  width: 100%;
+}
+
+.user-info span {
+  font-size: 1.4rem;
+}
+
+@media (max-width: 700px) {
+  .container {
+    grid-template-columns: 90vw;
+    grid-template-rows: min-content min-content;
+  }
+}

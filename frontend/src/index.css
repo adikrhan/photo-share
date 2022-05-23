@@ -1,0 +1,102 @@
+@import url("https://fonts.googleapis.com/css2?family=Bevan&family=Open+Sans:wght@300;400;500;600;700&display=swap");
+
+@font-face {
+  font-family: "Futura PT";
+  src: url(./assets/FuturaPTBold.otf);
+  font-weight: bold;
+}
+
+@font-face {
+  font-family: "FuturaBook";
+  src: url(./assets/FuturaPTBook.otf);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  --border-radius-xl: 2rem;
+  --border-radius-lg: 1.5rem;
+  --border-radius-sm: 0.5rem;
+
+  --color-primary-green: #207227;
+  --color-light-green: #e3f9e5;
+  --color-disabled-green: #c5fcc9;
+  --color-primary-blue: #0b4f71;
+
+  --primary-text-color: #1f2933;
+  --secondary-text-color: #3f3f3f;
+
+  --support-color: #e4f8fa;
+
+  --footer-height: 6rem;
+  --footer-margin-top: 8rem;
+
+  --margin-top: 8rem;
+
+  --grid-columns: 3;
+}
+
+body {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: "Open Sans", "Roboto", "Oxygen", "Ubuntu", "Cantarell",
+    "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Futura PT";
+  margin: 0;
+}
+
+p,
+a,
+button {
+  font-family: "Open sans";
+}
+
+a {
+  color: var(--primary-text-color);
+  text-decoration: none;
+}
+
+ul {
+  list-style: none;
+}
+
+html {
+  font-size: 62.5%;
+}
+
+#root {
+  position: relative;
+  min-height: 100vh;
+}
+
+.Toastify__toast-body {
+  font-size: 1.4rem;
+}
+
+@media (min-width: 1500px) {
+  :root {
+    --margin-top: 15rem;
+  }
+}
+
+@media (max-width: 800px) {
+  html {
+    font-size: 56.25%;
+  }
+  :root {
+    --grid-columns: 2;
+  }
+}
