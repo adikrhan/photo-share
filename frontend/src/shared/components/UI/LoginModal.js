@@ -1,18 +1,21 @@
 import ReactDOM from "react-dom";
 import { useContext } from "react";
+import { useMutation } from "react-query";
+
 import useForm from "../../hooks/useForm";
 import useToast from "../../hooks/useToast";
-import { useHttp } from "../../hooks/useHttp";
 import { AuthContext } from "../../context/auth-context";
 import Input from "../UI/Input";
 import classes from "./LoginModal.module.css";
 import Button from "./Button";
 import { VALIDATOR_EMAIL, VALIDATOR_REQUIRE } from "../../util/validators";
+import useFetchWithError from "../../hooks/useFetchWithError";
+import Loader from "./Loader";
 
 const LoginModal = () => {
   const authCtx = useContext(AuthContext);
-  const [isLoading, sendRequest] = useHttp();
   const [notify] = useToast();
+  const fetchWithError = useFetchWithError();
 
   const inputs = {
     email: {
@@ -27,35 +30,35 @@ const LoginModal = () => {
 
   const [formState, inputHandler] = useForm(inputs, false);
 
-  const loginClickHandler = async (event) => {
-    event.preventDefault();
-
+  const loginHandler = () => {
     const userData = {
       email: formState.inputs.email.value,
       password: formState.inputs.password.value,
     };
-    const loginUrl = "http://localhost:3001/api/users/login";
-    const headers = {
-      "Content-Type": "application/json",
-    };
 
-    try {
-      const data = await sendRequest(
-        loginUrl,
-        "POST",
-        JSON.stringify(userData),
-        headers
-      );
-        console.log("login", data);
+    return fetchWithError("http://localhost:3001/api/users/login", {
+      method: "POST",
+      body: JSON.stringify(userData),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+  };
+
+  const login = useMutation(loginHandler, {
+    onSuccess: (data) => {
+      notify(`Logged in as ${data.name}`, "success");
       authCtx.login({
         name: data.name,
         userId: data.userId,
         image: data.image,
-        token: data.token
+        token: data.token,
       });
-      notify(`Logged in as ${data.name}`, "success");
-    } catch (error) {}
-  };
+    },
+    onError: (error) => {
+      notify(`Could not login: ${error.message}`, "error");
+    },
+  });
 
   const content = (
     <div className={classes["login-modal"]}>
@@ -79,7 +82,13 @@ const LoginModal = () => {
           errorText="Please enter a password"
           onInput={inputHandler}
         />
-        <Button text="Go" onClick={loginClickHandler} />
+        <div className={classes['btn-container']}>
+          {login.isLoading ? (
+            <Loader />
+          ) : (
+            <Button text="Go" onClick={() => login.mutate()} />
+          )}
+        </div>
       </form>
     </div>
   );

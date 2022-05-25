@@ -1,18 +1,13 @@
 const useFetchWithError = () => {
   const fetchWithError = async (url, options) => {
     const response = await fetch(url, options);
+    const result = await response.json();
 
-    let errorMessage = "";
-    if (response.status === 200) {
-      const result = await response.json();
-      if (result.error) {
-        throw new Error(result.error);
-      }
-
-      return result;
+    if (!response.ok) {
+      throw new Error(`${result.message}`);
     }
 
-    throw new Error(`Error ${response.status}: ${response.statusText}`);
+    return result;
   };
 
   return fetchWithError;

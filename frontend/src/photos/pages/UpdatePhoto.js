@@ -1,22 +1,28 @@
 import { useContext, useEffect, useState, useRef } from "react";
-import { useParams } from "react-router-dom";
+import { useMutation, useQueryClient } from "react-query";
+import { useParams, useNavigate } from "react-router-dom";
 import Chip from "@mui/material/Chip";
 
 import useForm from "../../shared/hooks/useForm";
-import { useHttp } from "../../shared/hooks/useHttp";
 import { VALIDATOR_REQUIRE } from "../../shared/util/validators";
 import Input from "../../shared/components/UI/Input";
 import Button from "../../shared/components/UI/Button";
 import { AuthContext } from "../../shared/context/auth-context";
 import Loader from "../../shared/components/UI/Loader";
 import classes from "./UpdatePhoto.module.css";
+import useFetchWithError from "../../shared/hooks/useFetchWithError";
+import useToast from "../../shared/hooks/useToast";
 
 const AddPhoto = () => {
-  const [currentPhoto, setCurrentPhoto] = useState();
-  const [isLoading, sendRequest] = useHttp();
+  const queryClient = useQueryClient();
   const authCtx = useContext(AuthContext);
+  const [photo, setPhoto] = useState();
   const [tags, setTags] = useState([]);
   const tagInputRef = useRef();
+  const fetchWithError = useFetchWithError();
+  const [notify] = useToast();
+  const navigate = useNavigate();
+
   const { pid } = useParams();
 
   const inputs = {
@@ -51,54 +57,47 @@ const AddPhoto = () => {
     false
   );
 
-  useEffect(() => {
-    const fetchPhoto = async () => {
-      console.log("fetchPhoto", pid);
-      try {
-        const data = await sendRequest(
-          `http://localhost:3001/api/photos/${pid}`
-        );
-        if (data.photo) {
-          setCurrentPhoto(data.photo);
-          const tagPairs = data.photo.tags.map((tag, index) => ({
-            value: tag,
-            id: index,
-          }));
-          setTags(tagPairs);
-          setFormData(
-            {
-              title: {
-                value: data.photo.title,
-                isValid: true,
-              },
-              camera: {
-                value: data.photo.camera,
-                isValid: true,
-              },
-              lens: {
-                value: data.photo.lens,
-                isValid: true,
-              },
-              location: {
-                value: data.photo.location,
-                isValid: true,
-              },
-              date: {
-                value: data.photo.date,
-                isValid: true,
-              },
-              tags: {
-                value: "",
-                isValid: true,
-              },
-            },
-            true
-          );
-        }
-      } catch (error) {}
-    };
-    fetchPhoto();
-  }, [sendRequest]);
+  const setPhotoData = () => {
+    const photo = queryClient.getQueryData(["photos", pid]);
+    if (photo) {
+      setPhoto(photo);
+      console.log("PHOTO", photo);
+      const tagPairs = photo.tags.map((tag, index) => ({
+        value: tag,
+        id: index,
+      }));
+      setTags(tagPairs);
+      setFormData(
+        {
+          title: {
+            value: photo.title,
+            isValid: true,
+          },
+          camera: {
+            value: photo.camera,
+            isValid: true,
+          },
+          lens: {
+            value: photo.lens,
+            isValid: true,
+          },
+          location: {
+            value: photo.location,
+            isValid: true,
+          },
+          date: {
+            value: photo.date,
+            isValid: true,
+          },
+          tags: {
+            value: "",
+            isValid: true,
+          },
+        },
+        true
+      );
+    }
+  };
 
   useEffect(() => {
     if (tagInputRef && tagInputRef.current) {
@@ -106,7 +105,11 @@ const AddPhoto = () => {
     }
   }, [tags]);
 
-  const onUpdatePhoto = async (event) => {
+  useEffect(() => {
+    setPhotoData();
+  }, []);
+
+  const updatePhotoHandler = () => {
     const tagList = tags.map((tag) => tag.value);
 
     const photoData = {
@@ -118,20 +121,25 @@ const AddPhoto = () => {
       tags: tagList,
     };
 
-    try {
-      const data = await sendRequest(
-        `http://localhost:3001/api/photos/${pid}`,
-        "PATCH",
-        JSON.stringify(photoData),
-        {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${authCtx.loggedInUser.token}`,
-        },
-        "Photo updated successfully",
-        "/"
-      );
-    } catch (error) {}
+    return fetchWithError(`http://localhost:3001/api/photos/${pid}`, {
+      method: "PATCH",
+      body: JSON.stringify(photoData),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${authCtx.loggedInUser.token}`,
+      },
+    });
   };
+
+  const updatePhoto = useMutation(updatePhotoHandler, {
+    onSuccess: (data) => {
+      notify("Photo has been updated", "success");
+      navigate("/");
+    },
+    onError: (error) => {
+      notify(`Could not update photo: ${error}`, "error");
+    },
+  });
 
   const onKeyDown = (event) => {
     if (event.keyCode !== 13) return;
@@ -148,14 +156,10 @@ const AddPhoto = () => {
     setTags(filteredTags);
   };
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
   return (
     <div className={classes.container}>
       <h2>{pid ? "Edit" : "Add"} photo</h2>
-      {!isLoading && currentPhoto && (
+      {photo && (
         <form className={classes["add-place-form"]}>
           <Input
             type="text"
@@ -233,16 +237,18 @@ const AddPhoto = () => {
               })}
             </div>
           )}
-          {isLoading && <Loader width="3rem" />}
-          {!isLoading && (
-            <Button
-              text="Save"
-              type="button"
-              disabled={!formState.isValid}
-              onClick={onUpdatePhoto}
-              style={{ marginBottom: "4rem" }}
-            />
-          )}
+
+          <div style={{ textAlign: "center" }}>
+            {updatePhoto.isLoading && <Loader width="3rem" />}
+            {!updatePhoto.isLoading && (
+              <Button
+                text="Save"
+                type="button"
+                disabled={!formState.isValid}
+                onClick={() => updatePhoto.mutate()}
+              />
+            )}
+          </div>
         </form>
       )}
     </div>

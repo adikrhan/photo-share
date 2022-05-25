@@ -21,8 +21,12 @@
 .login-modal form {
   display: flex;
   flex-direction: column;
-  gap: .5rem;
+  gap: 0.5rem;
 }
 
-
-
+.btn-container {
+  height: 7rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

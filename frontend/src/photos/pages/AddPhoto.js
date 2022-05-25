@@ -1,7 +1,8 @@
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useContext, useState, useRef, useEffect } from "react";
+import { useNavigate } from 'react-router-dom';
 import useForm from "../../shared/hooks/useForm";
 import useWindowSize from "../../shared/hooks/useWindowSize";
-import { useHttp } from "../../shared/hooks/useHttp";
 import { VALIDATOR_REQUIRE } from "../../shared/util/validators";
 import Input from "../../shared/components/UI/Input";
 import Button from "../../shared/components/UI/Button";
@@ -10,13 +11,18 @@ import { AuthContext } from "../../shared/context/auth-context";
 import Loader from "../../shared/components/UI/Loader";
 
 import Chip from "@mui/material/Chip";
+import useToast from "../../shared/hooks/useToast";
+import useFetchWithError from "../../shared/hooks/useFetchWithError";
 
 const AddPhoto = () => {
+  const queryClient = useQueryClient();
+  const navigate = useNavigate()
   const authCtx = useContext(AuthContext);
   const screenSize = useWindowSize();
   const tagInputRef = useRef();
   const [tags, setTags] = useState([]);
-  const [isLoading, sendRequest] = useHttp();
+  const [notify] = useToast();
+
   const inputs = {
     title: {
       value: "",
@@ -63,9 +69,9 @@ const AddPhoto = () => {
     setTags(filteredTags);
   };
 
-  const onSubmitPhoto = async (event) => {
-    event.preventDefault();
+  const fetchWithError = useFetchWithError();
 
+  const addPhotoHandler = async () => {
     const tagList = tags.map((tag) => tag.value);
 
     const photoData = {
@@ -79,20 +85,38 @@ const AddPhoto = () => {
       creator: authCtx.loggedInUser.userId,
     };
 
-    try {
-      const data = await sendRequest(
-        "http://localhost:3001/api/photos",
-        "POST",
-        JSON.stringify(photoData),
-        {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${authCtx.loggedInUser.token}`,
-        },
-        "Photo uploaded successfully",
-        "/"
-      );
-    } catch (error) {}
+    return fetchWithError("http://localhost:3001/api/photos", {
+      method: "POST",
+      body: JSON.stringify(photoData),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${authCtx.loggedInUser.token}`,
+      },
+    });
   };
+
+  const addPhoto = useMutation(addPhotoHandler, {
+    onSuccess: (data) => {
+      notify("Photo successfully added", "success");
+      queryClient.setQueryData(["photos", {}], (oldData) => {
+        const newPhoto = {
+          creator: {
+            id: authCtx.loggedInUser.userId,
+            name: authCtx.loggedInUser.name,
+          },
+          id: data.id,
+          publicId: data.publicId,
+          title: data.title,
+        };
+        return [newPhoto, ...oldData];
+      });
+      queryClient.invalidateQueries(["photos", {}]);
+      navigate('/');
+    },
+    onError: (error) => {
+      notify(`Could not add photo: ${error.message}`, "error");
+    },
+  });
 
   const onKeyDown = (event) => {
     if (event.keyCode !== 13) return;
@@ -224,13 +248,13 @@ const AddPhoto = () => {
         </div>
 
         <div style={{ textAlign: "center" }}>
-          {isLoading && <Loader />}
-          {!isLoading && (
+          {addPhoto.isLoading && <Loader />}
+          {!addPhoto.isLoading && (
             <Button
               text="Upload"
               type="button"
               disabled={!formState.isValid}
-              onClick={onSubmitPhoto}
+              onClick={() => addPhoto.mutate()}
             />
           )}
         </div>

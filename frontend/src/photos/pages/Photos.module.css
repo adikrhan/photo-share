@@ -50,3 +50,9 @@
     /* grid-template-columns: 1fr; */
   }
 }
+
+@media (min-width: 1600px) {
+  .container {
+    max-width: 60%;
+  }
+}

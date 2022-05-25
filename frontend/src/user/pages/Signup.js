@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { AuthContext } from "../../shared/context/auth-context";
-import { useNavigate } from "react-router-dom";
+import { useMutation } from 'react-query';
 
 import Input from "../../shared/components/UI/Input";
 import Button from "../../shared/components/UI/Button";
@@ -13,13 +13,13 @@ import {
 import classes from "./Signup.module.css";
 import useForm from "../../shared/hooks/useForm";
 import useToast from "../../shared/hooks/useToast";
-import { useHttp } from "../../shared/hooks/useHttp";
+import useFetchWithError from '../../shared/hooks/useFetchWithError';
 
 const Signup = () => {
   const authCtx = useContext(AuthContext);
   const [notify] = useToast();
   const signupUrl = "http://localhost:3001/api/users/signup";
-  const [isLoading, sendRequest] = useHttp();
+  const fetchWithError = useFetchWithError();
 
   const inputs = {
     name: {
@@ -42,8 +42,7 @@ const Signup = () => {
 
   const [formState, inputHandler] = useForm(inputs, false);
 
-  const signupSubmitHandler = async (event) => {
-    event.preventDefault();
+  const signupSubmitHandler = () => {
 
     const userData = {
       name: formState.inputs.name.value,
@@ -52,32 +51,36 @@ const Signup = () => {
       confirmPassword: formState.inputs.confirmPassword.value,
     };
 
-    const headers = {
-      "Content-Type": "application/json",
-    };
+    return fetchWithError(signupUrl, {
+      method: 'POST',
+      body: JSON.stringify(userData),
+      headers: {
+        "Content-Type": "application/json",
+      }
+    })
+  };
 
-    try {
-      const data = await sendRequest(
-        signupUrl,
-        "POST",
-        JSON.stringify(userData),
-        headers,
-        'Signed up successfully',
-        '/'
-      );
+  const signup = useMutation(signupSubmitHandler, {
+    onSuccess: (data) => {
+      console.log(data);
+      notify('Signed up successfully', 'success');
       authCtx.login({
         name: data.name,
         userId: data.userId,
         image: data.image,
         token: data.token
       });
-    } catch (error) {}
-  };
+    },
+    onError: (error) => {
+      console.log(error.message);
+      notify(`${error.message}`, 'error');
+    }
+  })
 
   return (
     <div className={classes.container}>
       <h2>Sign up</h2>
-      <form onSubmit={signupSubmitHandler} className={classes["signup-form"]}>
+      <form className={classes["signup-form"]}>
         <Input
           type="text"
           name="name"
@@ -115,7 +118,7 @@ const Signup = () => {
           onInput={inputHandler}
           compareValue={formState.inputs.password.value}
         />
-        <Button text="Submit" type="submit" disabled={!formState.isValid} />
+        <Button text="Submit" type="button" onClick={signup.mutate} disabled={!formState.isValid} />
       </form>
     </div>
   );

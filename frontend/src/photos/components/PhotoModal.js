@@ -95,7 +95,7 @@ const PhotoModal = ({ photoId, onClickImage, onDeletePhoto }) => {
         ? setHasLiked(true)
         : setHasLiked(false);
     }
-  });
+  }, []);
 
   const authCtx = useContext(AuthContext);
 

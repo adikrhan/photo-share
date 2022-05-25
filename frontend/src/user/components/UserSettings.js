@@ -14,13 +14,14 @@ import { useParams } from "react-router-dom";
 import { AuthContext } from "../../shared/context/auth-context";
 import Loader from "../../shared/components/UI/Loader";
 import useToast from "../../shared/hooks/useToast";
+import useFetchWithError from "../../shared/hooks/useFetchWithError";
 
 const UserSettings = () => {
-  const queryClient = useQueryClient();
   const uploadUrl = "https://api.cloudinary.com/v1_1/dau7fdnej/upload";
   const authCtx = useContext(AuthContext);
   const [notify] = useToast();
   const [changingProfileImg, setChangingProfileImg] = useState(false);
+  const fetchWithError = useFetchWithError();
 
   const inputs = {
     name: {
@@ -63,8 +64,8 @@ const UserSettings = () => {
   const userQuery = useQuery(
     ["users", uid],
     async () => {
-      return fetch(`http://localhost:3001/api/users/${uid.toString()}`).then(
-        (res) => res.json()
+      return fetchWithError(
+        `http://localhost:3001/api/users/${uid.toString()}`
       );
     },
     {
@@ -128,14 +129,14 @@ const UserSettings = () => {
       software: formState.inputs.software.value,
     };
 
-    return fetch(`http://localhost:3001/api/users/${uid}`, {
+    return fetchWithError(`http://localhost:3001/api/users/${uid}`, {
       method: "PATCH",
       body: JSON.stringify(userData),
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${authCtx.loggedInUser.token}`,
       },
-    }).then((res) => res.json());
+    });
   };
 
   const updateUser = useMutation(updateUserHandler, {
@@ -146,7 +147,7 @@ const UserSettings = () => {
       }
     },
     onError: (error) => {
-      notify("Could not save, please try again later", "error");
+      notify(`Could not save: ${error.message}`, "error");
     },
   });
 
@@ -217,7 +218,7 @@ const UserSettings = () => {
                   className={classes["change-btn"]}
                   onClick={changeImgClickHandler}
                 >
-                  {changingProfileImg ? <Loader /> : 'Change'}
+                  {changingProfileImg ? <Loader /> : "Change"}
                 </button>
               </div>
               <div className={classes["profile-pic-img"]}>

@@ -36,18 +36,21 @@ const GridItem = (props) => {
   };
 
   const deletePhotoHandler = () => {
-    return fetch(`http://localhost:3001/api/photos/${props.photo.id}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${authCtx.loggedInUser.token}`,
-      },
-    }).then((res) => res.json());
+    return fetchWithError(
+      `http://localhost:3001/api/photos/${props.photo.id}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${authCtx.loggedInUser.token}`,
+        },
+      }
+    );
   };
 
-  const deletePhoto = useMutation(deletePhotoHandler, { 
+  const deletePhoto = useMutation(deletePhotoHandler, {
     onSuccess: (data) => {
-      notify('Photo deleted succesfully', 'success');
+      notify("Photo deleted", "success");
       queryClient.refetchQueries(["photos", {}], { exact: true });
     },
   });
@@ -56,21 +59,17 @@ const GridItem = (props) => {
     <Fragment>
       {photoId && <Backdrop onClickBackdrop={clickImageHandler} />}
       {photoId && (
-        <PhotoModal photoId={photoId} onClickImage={clickImageHandler} onDeletePhoto={deletePhoto} />
+        <PhotoModal
+          photoId={photoId}
+          onClickImage={clickImageHandler}
+          onDeletePhoto={deletePhoto}
+        />
       )}
 
-      <div
-        className={classes["grid-item"]}
-        onClick={clickImageHandler}
-        // onMouseEnter={() => {
-        //   queryClient.prefetchQuery(["photos", props.photo.id], () =>
-        //     fetchWithError(`http://localhost:3001/api/photos/${props.photo.id}`)
-        //   );
-        // }}
-      >
+      <div className={classes["grid-item"]} onClick={clickImageHandler}>
         <div className={classes["item-img"]}>
           <AdvancedImage
-            cldImg={getCloudinaryImage(props.photo, { width: 800 })}
+            cldImg={getCloudinaryImage(props.photo, { width: 500 })}
           />
         </div>
         <div className={classes["item-text"]}>

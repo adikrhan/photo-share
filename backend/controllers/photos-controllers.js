@@ -30,7 +30,9 @@ const getPhotoById = async (req, res, next) => {
 
   let photo;
   try {
-    photo = await Photo.findById(photoId).populate("creator").populate("likes", 'name image id');
+    photo = await Photo.findById(photoId)
+      .populate("creator")
+      .populate("likes", "name image id");
   } catch (error) {
     return next(
       new HttpError("Something went wrong, could not find photo.", 500)
@@ -129,9 +131,8 @@ const postPhoto = async (req, res, next) => {
       tags: tags,
     });
   } catch (error) {
-    console.log(error);
     return next(
-      new HttpError(error.message || "Posting photo on cloudinary failed.", 500)
+      new HttpError(error || "Posting photo on cloudinary failed.", 500)
     );
   }
 
@@ -167,7 +168,7 @@ const postPhoto = async (req, res, next) => {
     return next(new HttpError("Posting photo failed, please try again.", 500));
   }
 
-  res.status(201).json(postedPhoto);
+  res.status(201).json(postedPhoto.toObject({ getters: true }));
   // res.status(201).json({ message: "Posted photo" });
 };
 
@@ -286,7 +287,9 @@ const updateLikes = async (req, res, next) => {
 
   let photo;
   try {
-    photo = await Photo.findById(photoId).populate("creator").populate("likes", 'name image id');
+    photo = await Photo.findById(photoId)
+      .populate("creator")
+      .populate("likes", "name image id");
   } catch (error) {
     console.log(error);
     return next(
