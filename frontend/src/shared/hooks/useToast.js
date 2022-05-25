@@ -13,7 +13,6 @@ const useToast = () => {
   };
 
   const notify = (message, type) => {
-    console.log("=====NOTIFY=====")
     if (type === "error") {
       toast.error(message, toastConfig);
     } else if (type === "success") {
