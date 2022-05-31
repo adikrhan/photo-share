@@ -1,6 +1,8 @@
+require("dotenv").config();
 const axios = require("axios");
 const HttpError = require("../models/http-error");
-const API_KEY = "AIzaSyAXUJzSQ6nKDeqjzDpJNwr4R9flt3Xgk80";
+
+const API_KEY = process.env.GOOGLE_MAPS_API_KEY;
 
 async function getCoordinatesForAddress(address) {
   console.log("getCoordinatesForAddress");
@@ -25,11 +27,7 @@ async function getCoordinatesForAddress(address) {
   const data = response.data;
 
   if (!data || data.status === "ZERO_RESULTS") {
-    const error = new HttpError(
-      "Could not find location for the specified address",
-      422
-    );
-    throw error;
+    return null;
   }
 
   const coordinates = data.results[0].geometry.location;

@@ -1,0 +1,10 @@
+.pin svg {
+  font-size: 3rem;
+  color: #dd1f1f;
+}
+
+@media (max-width: 800px) {
+  .google-map {
+    height: 50vh;
+  }
+}

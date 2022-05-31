@@ -32,16 +32,9 @@ const Photos = () => {
       retry: false,
       onError: (error) => {
         notify(error.message, "error");
-      },
-      onSuccess: (data) => {
-        console.log(data);
       }
     }
   );
-
-  if (photosQuery.isLoading) {
-    return <Loader width={150} className={classes.loading} />;
-  }
 
   return (
     <div className={classes.container}>

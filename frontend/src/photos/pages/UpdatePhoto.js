@@ -61,7 +61,6 @@ const AddPhoto = () => {
     const photo = queryClient.getQueryData(["photos", pid]);
     if (photo) {
       setPhoto(photo);
-      console.log("PHOTO", photo);
       const tagPairs = photo.tags.map((tag, index) => ({
         value: tag,
         id: index,

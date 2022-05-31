@@ -228,11 +228,6 @@ const AddPhoto = () => {
         <div className={classes["import-file-container"]}>
           {!previewSrc && (
             <div className={classes["chooser"]}>
-              {screenSize > 700 && (
-                <p>
-                  Drag and drop a file <br></br> or{" "}
-                </p>
-              )}
               <button type="button" onClick={onChoosePhoto}>
                 Choose photo
               </button>

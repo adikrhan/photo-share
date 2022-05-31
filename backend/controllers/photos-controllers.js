@@ -31,7 +31,7 @@ const getPhotoById = async (req, res, next) => {
   let photo;
   try {
     photo = await Photo.findById(photoId)
-      .populate("creator")
+      .populate("creator", "-password")
       .populate("likes", "name image id");
   } catch (error) {
     return next(
@@ -72,7 +72,7 @@ const getPhotosBySearchTerm = async (req, res, next) => {
   const tag = req.params.searchTerm;
 
   try {
-    photos = await Photo.find({ tags: tag }).populate("creator");
+    photos = await Photo.find({ tags: tag }).populate("creator", "-password");
   } catch (error) {
     console.log(error);
     return next(
@@ -100,14 +100,14 @@ const postPhoto = async (req, res, next) => {
   const { title, camera, lens, location, date, tags, image } = req.body;
   const creator = req.userData.userId;
 
-  // let coordinates;
-  // if (location) {
-  //   try {
-  //     coordinates = await getCoordinatesForAddress(location);
-  //   } catch (error) {
-  //     return next(error);
-  //   }
-  // }
+  let coordinates;
+  if (location) {
+    try {
+      coordinates = await getCoordinatesForAddress(location);
+    } catch (error) {
+      return next(error);
+    }
+  }
 
   let user;
   try {
@@ -136,18 +136,18 @@ const postPhoto = async (req, res, next) => {
     );
   }
 
+  let { Model, Lens, CreateDate } = uploadedResponse.image_metadata;
+  CreateDate = CreateDate.split(' ')[0].split(':').join('-');
+
   const { url, public_id } = uploadedResponse;
 
   const postedPhoto = new Photo({
     title,
-    camera,
-    lens,
+    camera: Model,
+    lens: Lens || '',
     location,
-    coordinates: {
-      lat: 57.7026129,
-      lng: 11.9728919,
-    },
-    date,
+    coordinates,
+    date: CreateDate,
     tags,
     image: url,
     publicId: public_id,
@@ -196,17 +196,30 @@ const updatePhoto = async (req, res, next) => {
   }
 
   let updateResponse;
-  try {
-    updateResponse = await cloudinary.uploader.replace_tag(
-      tags,
-      photo.publicId
-    );
-  } catch (error) {
-    return next(
-      new HttpError("Something went wrong, could not update photo.", 500)
-    );
+  if (tags && tags.length > 0) {
+    try {
+      updateResponse = await cloudinary.uploader.replace_tag(
+        tags,
+        photo.publicId
+      );
+    } catch (error) {
+      return next(
+        new HttpError("Something went wrong, could not update photo.", 500)
+      );
+    }
   }
 
+  let coordinates;
+  if (location && photo.location !== location) {
+    try {
+      coordinates = await getCoordinatesForAddress(location);
+    } catch (error) {
+      console.log(error);
+      return next(error);
+    }
+  }
+
+  photo.coordinates = coordinates || null;
   photo.title = title;
   photo.camera = camera;
   photo.lens = lens;
@@ -218,6 +231,7 @@ const updatePhoto = async (req, res, next) => {
   try {
     await photo.save({ validateModifiedOnly: true });
   } catch (error) {
+    console.log(error);
     return next(
       new HttpError("Something went wrong, could not update photo", 500)
     );
@@ -288,7 +302,7 @@ const updateLikes = async (req, res, next) => {
   let photo;
   try {
     photo = await Photo.findById(photoId)
-      .populate("creator")
+      .populate("creator", "-password")
       .populate("likes", "name image id");
   } catch (error) {
     console.log(error);
@@ -303,7 +317,6 @@ const updateLikes = async (req, res, next) => {
     );
   }
 
-  console.log("Line 303", photo, action, photo.likes);
   if (action === "like") {
     photo.likes.push(uid);
   } else {

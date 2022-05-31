@@ -23,7 +23,7 @@ const getUserById = async (req, res, next) => {
 
   let user;
   try {
-    user = await User.findById(userId).populate({
+    user = await User.findById(userId, '-password').populate({
       path: "photos",
       populate: { path: "likes", select: 'name image id email' }
     });
@@ -168,13 +168,12 @@ const login = async (req, res, next) => {
   res.json({
     userId: existingUser.id,
     name: existingUser.name,
-    existingUser: existingUser.image,
+    image: existingUser.image,
     token: token,
   });
 };
 
 const updateUser = async (req, res, next) => {
-  console.log("updateUser");
   const {
     name,
     email,

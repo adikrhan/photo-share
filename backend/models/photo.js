@@ -8,8 +8,8 @@ const photoSchema = new Schema({
   lens: { type: String, required: false },
   location: { type: String, required: false },
   coordinates: {
-    lat: { type: Number, required: true },
-    lng: { type: Number, required: true },
+    lat: { type: Number, required: false },
+    lng: { type: Number, required: false },
   },
   date: { type: String, required: false },
   tags: [{ type: String, required: false }],

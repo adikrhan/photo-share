@@ -6,7 +6,6 @@ import useCloudinary from "../../shared/hooks/useCloudinary";
 import Backdrop from "../../shared/components/UI/Backdrop";
 import classes from "./GridItem.module.css";
 import PhotoModal from "./PhotoModal";
-import Map from "../../shared/components/Map";
 import useFetchWithError from "../../shared/hooks/useFetchWithError";
 import { AuthContext } from "../../shared/context/auth-context";
 import useToast from "../../shared/hooks/useToast";
@@ -14,7 +13,6 @@ import useToast from "../../shared/hooks/useToast";
 const GridItem = (props) => {
   const authCtx = useContext(AuthContext);
   const [photoId, setPhotoId] = useState();
-  const [showMap, setShowMap] = useState(false);
   const [getCloudinaryImage] = useCloudinary();
   const queryClient = useQueryClient();
   const [notify] = useToast();
@@ -27,12 +25,6 @@ const GridItem = (props) => {
     } else {
       setPhotoId(null);
     }
-  };
-
-  const clickMapHandler = () => {
-    setShowMap((prevState) => {
-      return !prevState;
-    });
   };
 
   const deletePhotoHandler = () => {

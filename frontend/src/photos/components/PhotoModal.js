@@ -4,21 +4,25 @@ import { useNavigate } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "react-query";
 
 import { AuthContext } from "../../shared/context/auth-context";
-import camera from "../../assets/camera.png";
-import diaphragm from "../../assets/diaphragm.png";
-import location from "../../assets/location.png";
-import calendar from "../../assets/calendar.png";
-import tag from "../../assets/tag.png";
 import userIcon from "../../assets/user.png";
-import { FaHeart, FaUserCircle, FaChevronLeft } from "react-icons/fa";
+import {
+  FaHeart,
+  FaUserCircle,
+  FaChevronLeft,
+  FaCalendarAlt,
+} from "react-icons/fa";
+import { MdCameraAlt, MdCamera, MdPlace } from "react-icons/md";
+import { BsFillTagFill } from "react-icons/bs";
 import classes from "./PhotoModal.module.css";
 import useFetchWithError from "../../shared/hooks/useFetchWithError";
 import Loader from "../../shared/components/UI/Loader";
+import Map from "./Map";
 
 const PhotoModal = ({ photoId, onClickImage, onDeletePhoto }) => {
   const [showConfirmDelete, setShowConfirmDelete] = useState(false);
-  const [hasLiked, setHasLiked] = useState();
   const [showLikedUsers, setShowLikedUsers] = useState(false);
+  const [mapView, setMapView] = useState(false);
+  const [hasLiked, setHasLiked] = useState();
   const navigate = useNavigate();
 
   const queryClient = useQueryClient();
@@ -167,9 +171,13 @@ const PhotoModal = ({ photoId, onClickImage, onDeletePhoto }) => {
       ) : (
         photo && (
           <Fragment>
-            <div className={classes["img-container"]}>
-              <img src={photo.image} alt="Text" onClick={onClickImage} />
-            </div>
+            {!mapView ? (
+              <div className={classes["img-container"]}>
+                <img src={photo.image} alt="Text" onClick={onClickImage} />
+              </div>
+            ) : (
+              <Map location={photo.coordinates} zoomLevel={14} />
+            )}
             <div className={classes["meta-container"]}>
               {showLikedUsers && likesList}
               {!showLikedUsers && (
@@ -193,32 +201,56 @@ const PhotoModal = ({ photoId, onClickImage, onDeletePhoto }) => {
                   </div>
                   <div className={classes.list}>
                     <ul>
-                      <li>
-                        <img src={camera} alt="Camera" />
-                        <span>{photo.camera}</span>
-                      </li>
-                      <li>
-                        <img src={diaphragm} alt="Lens" />
-                        <span>{photo.lens}</span>
-                      </li>
-                      <li>
-                        <img src={location} alt="Location" />
-                        <span>{photo.location}</span>
-                      </li>
-                      <li>
-                        <img src={calendar} alt="Date" />
-                        <span>{photo.date}</span>
-                      </li>
-                      <li>
-                        <img src={tag} alt="Tag" />
-                        <span>{photo.tags.join(", ")}</span>
-                      </li>
+                      {photo.camera && (
+                        <li>
+                          <MdCameraAlt />
+                          <span>{photo.camera}</span>
+                        </li>
+                      )}
+                      {photo.lens && (
+                        <li>
+                          <MdCamera />
+                          <span>{photo.lens}</span>
+                        </li>
+                      )}
+                      {photo.location && (
+                        <li>
+                          <MdPlace />
+                          <span>{photo.location}</span>
+                        </li>
+                      )}
+                      {photo.date && (
+                        <li>
+                          <FaCalendarAlt />
+                          <span>{photo.date}</span>
+                        </li>
+                      )}
+                      {photo.tags.length > 0 && (
+                        <li>
+                          <BsFillTagFill />
+                          <span>{photo.tags.join(", ")}</span>
+                        </li>
+                      )}
                     </ul>
                   </div>
                   <div className={classes.buttons}>
-                    <button className={`${classes.btn}  ${classes.map}`}>
-                      View on map
-                    </button>
+                    {!mapView && photo.coordinates ? (
+                      <button
+                        onClick={() => setMapView(true)}
+                        className={`${classes.btn} ${classes.map}`}
+                      >
+                        View on map
+                      </button>
+                    ) : mapView && photo.coordinates ? (
+                      <button
+                        onClick={() => setMapView(false)}
+                        className={`${classes.btn} ${classes['back-to-photo']}`}
+                      >
+                        Back
+                      </button>
+                    ) : (
+                      ""
+                    )}
                     {authCtx.isLoggedIn &&
                       authCtx.loggedInUser.userId !== creator.id && (
                         <button
