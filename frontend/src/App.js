@@ -23,9 +23,6 @@ const client = new QueryClient({
       staleTime: 1000 * 10,
       retry: 2,
       refetchOnWindowFocus: false,
-      onSuccess: (data) => {
-        console.log(data);
-      }
     }
   }
 });

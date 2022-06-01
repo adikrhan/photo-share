@@ -25,7 +25,7 @@ const Photos = () => {
   const photosQuery = useQuery(
     ["photos", {searchTerm}],
     ({ signal }) =>
-      fetchWithError(`http://localhost:3001/api/photos/${searchString}`, {
+      fetchWithError(`${process.env.REACT_APP_SERVER_BASE_URL}/api/photos/${searchString}`, {
         signal,
       }),
     {

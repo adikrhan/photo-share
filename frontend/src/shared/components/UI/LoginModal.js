@@ -36,7 +36,7 @@ const LoginModal = () => {
       password: formState.inputs.password.value,
     };
 
-    return fetchWithError("http://localhost:3001/api/users/login", {
+    return fetchWithError(`${process.env.REACT_APP_SERVER_BASE_URL}/api/users/login`, {
       method: "POST",
       body: JSON.stringify(userData),
       headers: {

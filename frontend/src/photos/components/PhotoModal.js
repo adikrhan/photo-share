@@ -31,9 +31,12 @@ const PhotoModal = ({ photoId, onClickImage, onDeletePhoto }) => {
   const photoQuery = useQuery(
     ["photos", photoId],
     ({ signal }) =>
-      fetchWithError(`http://localhost:3001/api/photos/${photoId}`, {
-        signal,
-      }),
+      fetchWithError(
+        `${process.env.REACT_APP_SERVER_BASE_URL}/api/photos/${photoId}`,
+        {
+          signal,
+        }
+      ),
     {
       onError: (error) => {
         console.error(error);
@@ -58,7 +61,7 @@ const PhotoModal = ({ photoId, onClickImage, onDeletePhoto }) => {
     let body = { uid: authCtx.loggedInUser.userId };
     hasLiked ? (body.action = "unlike") : (body.action = "like");
     return fetch(
-      `http://localhost:3001/api/photos/like/${photoQuery.data?.id}`,
+      `${process.env.REACT_APP_SERVER_BASE_URL}/api/photos/like/${photoQuery.data?.id}`,
       {
         method: "PATCH",
         body: JSON.stringify(body),
@@ -244,7 +247,7 @@ const PhotoModal = ({ photoId, onClickImage, onDeletePhoto }) => {
                     ) : mapView && photo.coordinates ? (
                       <button
                         onClick={() => setMapView(false)}
-                        className={`${classes.btn} ${classes['back-to-photo']}`}
+                        className={`${classes.btn} ${classes["back-to-photo"]}`}
                       >
                         Back
                       </button>

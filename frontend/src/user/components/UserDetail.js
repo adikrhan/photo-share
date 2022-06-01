@@ -27,14 +27,11 @@ const UserDetail = () => {
   const userQuery = useQuery(
     ["users", uid],
     async () => {
-      return fetch(`http://localhost:3001/api/users/${uid.toString()}`).then(
+      return fetch(`${process.env.REACT_APP_SERVER_BASE_URL}/api/users/${uid.toString()}`).then(
         (res) => res.json()
       );
     },
     {
-      onSuccess: (data) => {
-        console.log(data);
-      },
       onError: (error) => {
         notify("Could not load user", "error");
       },
@@ -63,7 +60,7 @@ const UserDetail = () => {
   };
 
   const deletePhotoHandler = () => {
-    return fetch(`http://localhost:3001/api/photos/${photoId}`, {
+    return fetch(`${process.env.REACT_APP_SERVER_BASE_URL}/api/photos/${photoId}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",

@@ -120,7 +120,7 @@ const AddPhoto = () => {
       tags: tagList,
     };
 
-    return fetchWithError(`http://localhost:3001/api/photos/${pid}`, {
+    return fetchWithError(`${process.env.REACT_APP_SERVER_BASE_URL}/api/photos/${pid}`, {
       method: "PATCH",
       body: JSON.stringify(photoData),
       headers: {

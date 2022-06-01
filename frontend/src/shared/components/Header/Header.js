@@ -25,14 +25,12 @@ const Header = () => {
   const [showUserModal, setShowUserModal] = useState(false);
 
   const toggleMenuClickHandler = () => {
-    console.log("toggleMenuClickHandler");
     setShowSideDrawer((prevState) => {
       setShowSideDrawer(!prevState);
     });
   };
 
   const loginClickHandler = () => {
-    console.log("loginClickHandler");
     setShowLoginModal((prevState) => {
       return !prevState;
     });

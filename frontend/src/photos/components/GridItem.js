@@ -29,7 +29,7 @@ const GridItem = (props) => {
 
   const deletePhotoHandler = () => {
     return fetchWithError(
-      `http://localhost:3001/api/photos/${props.photo.id}`,
+      `${process.env.REACT_APP_SERVER_BASE_URL}/api/photos/${props.photo.id}`,
       {
         method: "DELETE",
         headers: {

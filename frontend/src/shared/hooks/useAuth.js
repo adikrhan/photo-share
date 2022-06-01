@@ -8,7 +8,6 @@ const useAuth = () => {
   const [loggedInUser, setLoggedInUser] = useState({});
 
   const login = useCallback(async (userData, expDate = null) => {
-    console.log("login", userData);
     const tokenExpDate =
       expDate || new Date(new Date().getTime() + 1000 * 60 * 60);
     setIsLoggedIn(true);

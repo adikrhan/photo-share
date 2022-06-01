@@ -85,7 +85,7 @@ const AddPhoto = () => {
       creator: authCtx.loggedInUser.userId,
     };
 
-    return fetchWithError("http://localhost:3001/api/photos", {
+    return fetchWithError(`${process.env.REACT_APP_SERVER_BASE_URL}/api/photos`, {
       method: "POST",
       body: JSON.stringify(photoData),
       headers: {

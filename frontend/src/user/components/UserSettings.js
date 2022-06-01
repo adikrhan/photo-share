@@ -65,7 +65,7 @@ const UserSettings = () => {
     ["users", uid],
     async () => {
       return fetchWithError(
-        `http://localhost:3001/api/users/${uid.toString()}`
+        `${process.env.REACT_APP_SERVER_BASE_URL}/api/users/${uid.toString()}`
       );
     },
     {
@@ -129,7 +129,7 @@ const UserSettings = () => {
       software: formState.inputs.software.value,
     };
 
-    return fetchWithError(`http://localhost:3001/api/users/${uid}`, {
+    return fetchWithError(`${process.env.REACT_APP_SERVER_BASE_URL}/api/users/${uid}`, {
       method: "PATCH",
       body: JSON.stringify(userData),
       headers: {

@@ -210,16 +210,15 @@ const updatePhoto = async (req, res, next) => {
   }
 
   let coordinates;
-  if (location && photo.location !== location) {
+  if (location && !coordinates || location !== photo.location) {
     try {
-      coordinates = await getCoordinatesForAddress(location);
+      photo.coordinates = await getCoordinatesForAddress(location);
     } catch (error) {
       console.log(error);
       return next(error);
     }
   }
 
-  photo.coordinates = coordinates || null;
   photo.title = title;
   photo.camera = camera;
   photo.lens = lens;

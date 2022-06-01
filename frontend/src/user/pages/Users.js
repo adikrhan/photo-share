@@ -16,7 +16,7 @@ const Users = () => {
   const usersQuery = useQuery(
     ["users"],
     ({ signal }) =>
-      fetchWithError(`http://localhost:3001/api/users`, { signal }),
+      fetchWithError(`${process.env.REACT_APP_SERVER_BASE_URL}/api/users`, { signal }),
     {
       onError: (error) => {
         notify(error.message, "error");

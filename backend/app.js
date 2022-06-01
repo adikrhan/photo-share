@@ -8,7 +8,6 @@ const usersRoutes = require("./routes/users-routes");
 const HttpError = require("./models/http-error");
 
 const app = express();
-const port = 3001;
 
 const corsOptions = {
   "allowedHeaders": "Authorization, Content-Type, Accept",
@@ -36,7 +35,7 @@ mongoose
     "mongodb+srv://adikrhan:oGLZYSH9uy4vSqZj@cluster0.6kx2m.mongodb.net/photos?retryWrites=true&w=majority"
   )
   .then(() => {
-    app.listen(port, () => {
+    app.listen({ port: process.env.PORT || 3001 }, () => {
       console.log("Listening on port 3001");
     });
   })

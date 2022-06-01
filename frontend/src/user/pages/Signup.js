@@ -18,7 +18,7 @@ import useFetchWithError from '../../shared/hooks/useFetchWithError';
 const Signup = () => {
   const authCtx = useContext(AuthContext);
   const [notify] = useToast();
-  const signupUrl = "http://localhost:3001/api/users/signup";
+  const signupUrl = `${process.env.REACT_APP_SERVER_BASE_URL}/api/users/signup`;
   const fetchWithError = useFetchWithError();
 
   const inputs = {

@@ -29,7 +29,7 @@ async function getCoordinatesForAddress(address) {
   if (!data || data.status === "ZERO_RESULTS") {
     return null;
   }
-
+  
   const coordinates = data.results[0].geometry.location;
 
   return coordinates;
